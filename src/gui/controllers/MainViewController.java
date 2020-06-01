@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import application.Main;
 import gui.util.Alerts;
@@ -8,7 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -37,7 +36,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void onMenuItemDepartmentAction(){
-        showView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+        showView("/gui/views/DepartmentList.fxml", (DepartmentListController controller) -> {
             controller.setDepartmentService(new DepartmentService());
             controller.updateTableView();
         });
@@ -45,7 +44,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void onMenuItemAboutAction(){
-        showView("/gui/About.fxml", x -> {});
+        showView("/gui/views/About.fxml", x -> {});
     }
 
     @Override
