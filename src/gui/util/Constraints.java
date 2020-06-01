@@ -14,7 +14,7 @@ public class Constraints {
 
     public static void setTextFieldMaxValue(TextField textField, int maxValue) {
         textField.textProperty().addListener((obs,oldValue,newValue) -> {
-            if (newValue != null && !(newValue.length() > maxValue)) {
+            if (newValue != null && newValue.length() > maxValue) {
                 textField.setText(oldValue);
             }
         });

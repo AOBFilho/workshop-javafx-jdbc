@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui;
 
 import application.Main;
 import gui.util.Alerts;
@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -45,7 +44,7 @@ public class DepartmentListController implements Initializable {
     private ObservableList<Department> observableListDepartment;
     @FXML
     public void onBtnNewAction(ActionEvent event) {
-        openDialogForm("/gui/views/DepartmentForm.fxml", Utils.currentStage(event));
+        openDialogForm("/gui/DepartmentForm.fxml", Utils.currentStage(event));
     }
 
     @Override
