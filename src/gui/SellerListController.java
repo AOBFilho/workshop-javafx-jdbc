@@ -62,7 +62,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 
     @FXML
     public void onBtnNewAction(ActionEvent event) {
-        //openDialogForm(new Seller(), "/gui/SellerForm.fxml", Utils.currentStage(event));
+        openDialogForm(new Seller(), "/gui/SellerForm.fxml", Utils.currentStage(event));
     }
 
     @Override
@@ -99,25 +99,25 @@ public class SellerListController implements Initializable, DataChangeListener {
     }
 
     private void openDialogForm(Seller department, String absoluteName, Stage parentStage) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//            Pane pane = loader.load();
-//            SellerFormController departmentFormController = loader.getController();
-//            departmentFormController.setEntity(department);
-//            departmentFormController.setService(new SellerService());
-//            departmentFormController.subscribeDataChangeListener(this);
-//            departmentFormController.updateFormData();
-//
-//            Stage modalStage = new Stage();
-//            modalStage.setScene(new Scene(pane));
-//            modalStage.setTitle("Enter department data");
-//            modalStage.setResizable(false);
-//            modalStage.initOwner(parentStage);
-//            modalStage.initModality(Modality.WINDOW_MODAL);
-//            modalStage.showAndWait();
-//        } catch (IOException e) {
-//            Alerts.showAlert("IO Exception","Error opening view",e.getMessage(), Alert.AlertType.ERROR);
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
+            SellerFormController departmentFormController = loader.getController();
+            departmentFormController.setEntity(department);
+            departmentFormController.setService(new SellerService());
+            departmentFormController.subscribeDataChangeListener(this);
+            departmentFormController.updateFormData();
+
+            Stage modalStage = new Stage();
+            modalStage.setScene(new Scene(pane));
+            modalStage.setTitle("Enter department data");
+            modalStage.setResizable(false);
+            modalStage.initOwner(parentStage);
+            modalStage.initModality(Modality.WINDOW_MODAL);
+            modalStage.showAndWait();
+        } catch (IOException e) {
+            Alerts.showAlert("IO Exception","Error opening view",e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @Override
