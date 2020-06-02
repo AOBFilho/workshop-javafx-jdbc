@@ -1,19 +1,27 @@
 package gui;
 
+import db.DBException;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DepartmentFormController implements Initializable {
 
-    private Department department;
+    private Department entity;
+
+    private DepartmentService service;
 
     @FXML
     private TextField textFieldId;
@@ -31,13 +39,25 @@ public class DepartmentFormController implements Initializable {
     private Button buttonCancel;
 
     @FXML
-    public void onButtonSaveAction() {
-        System.out.println("onButtonSaveAction");
+    public void onButtonSaveAction(ActionEvent event) {
+        if (entity == null) {
+            throw new IllegalStateException("Entity was null");
+        }
+        if (service == null) {
+            throw new IllegalStateException("Service was null");
+        }
+        try {
+            entity = getFormData();
+            service.insertOrUpdate(entity);
+            Utils.currentStage(event).close();
+        } catch (DBException e) {
+            Alerts.showAlert("Error saving department",null,e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
-    public void onButtonCancelAction() {
-        System.out.println("onButtonCancelAction");
+    public void onButtonCancelAction(ActionEvent event) {
+        Utils.currentStage(event).close();
     }
 
     @Override
@@ -45,16 +65,27 @@ public class DepartmentFormController implements Initializable {
         initializeNodes();
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setEntity(Department entity) {
+        this.entity = entity;
+    }
+
+    public void setService(DepartmentService service) {
+        this.service = service;
     }
 
     public void updateFormData() {
-        if (department == null) {
+        if (entity == null) {
             throw new IllegalStateException("Department was null");
         }
-        textFieldId.setText(String.valueOf(department.getId()));
-        textFieldName.setText(department.getName());
+        textFieldId.setText(String.valueOf(entity.getId()));
+        textFieldName.setText(entity.getName());
+    }
+
+    private Department getFormData() {
+        Department department = new Department();
+        department.setId(Utils.tryParseToInt(textFieldId.getText()));
+        department.setName(textFieldName.getText());
+        return department;
     }
 
     private void initializeNodes() {

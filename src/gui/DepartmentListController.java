@@ -78,7 +78,8 @@ public class DepartmentListController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
             DepartmentFormController departmentFormController = loader.getController();
-            departmentFormController.setDepartment(department);
+            departmentFormController.setEntity(department);
+            departmentFormController.setService(new DepartmentService());
             departmentFormController.updateFormData();
 
             Stage modalStage = new Stage();
