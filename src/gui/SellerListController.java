@@ -23,6 +23,7 @@ import model.services.SellerService;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -41,6 +42,15 @@ public class SellerListController implements Initializable, DataChangeListener {
 
     @FXML
     private TableColumn<Seller,String> tableColumnName;
+
+    @FXML
+    private TableColumn<Seller,String> tableColumnEmail;
+
+    @FXML
+    private TableColumn<Seller, LocalDate> tableColumnBirthDate;
+
+    @FXML
+    private TableColumn<Seller,Double> tableColumnBaseSalary;
 
     @FXML
     private TableColumn<Seller,Seller> tableColumnEdit;
@@ -77,6 +87,12 @@ public class SellerListController implements Initializable, DataChangeListener {
     private void initializeNode() {
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+        tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+        Utils.formatTableColumnDate(tableColumnBirthDate,"dd/MM/yyyy");
+        Utils.formatTableColumnDouble(tableColumnBaseSalary,2);
+
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
         tableViewSeller.prefWidthProperty().bind(stage.widthProperty());
@@ -151,7 +167,7 @@ public class SellerListController implements Initializable, DataChangeListener {
             throw new IllegalStateException("Service was null");
         }
         Optional<ButtonType> result = Alerts.showConfirmation("Deleting department","Are you sure to delete");
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 departmentService.delete(department);
                 updateTableView();

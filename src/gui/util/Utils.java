@@ -2,7 +2,14 @@ package gui.util;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Utils {
 
@@ -16,5 +23,34 @@ public class Utils {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    public static <T> void formatTableColumnDate(TableColumn<T, LocalDate> tableColumn, String format) {
+        tableColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.format(DateTimeFormatter.ofPattern(format)));
+                }
+            }
+        });
+    }
+
+    public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {
+        tableColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    Locale.setDefault(Locale.US);
+                    setText(String.format("%." + decimalPlaces + "f", item));
+                }
+            }
+        });
     }
 }
