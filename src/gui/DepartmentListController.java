@@ -42,9 +42,10 @@ public class DepartmentListController implements Initializable {
     private TableColumn<Department,String> tableColumnName;
 
     private ObservableList<Department> observableListDepartment;
+
     @FXML
     public void onBtnNewAction(ActionEvent event) {
-        openDialogForm("/gui/DepartmentForm.fxml", Utils.currentStage(event));
+        openDialogForm(new Department(), "/gui/DepartmentForm.fxml", Utils.currentStage(event));
     }
 
     @Override
@@ -72,10 +73,13 @@ public class DepartmentListController implements Initializable {
         tableViewDepartment.prefWidthProperty().bind(stage.widthProperty());
     }
 
-    private void openDialogForm(String absoluteName, Stage parentStage) {
+    private void openDialogForm(Department department, String absoluteName, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
+            DepartmentFormController departmentFormController = loader.getController();
+            departmentFormController.setDepartment(department);
+            departmentFormController.updateFormData();
 
             Stage modalStage = new Stage();
             modalStage.setScene(new Scene(pane));
