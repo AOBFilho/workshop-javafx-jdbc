@@ -1,6 +1,7 @@
 package gui;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 
     private DepartmentService departmentService;
 
@@ -80,6 +81,7 @@ public class DepartmentListController implements Initializable {
             DepartmentFormController departmentFormController = loader.getController();
             departmentFormController.setEntity(department);
             departmentFormController.setService(new DepartmentService());
+            departmentFormController.subscribeDataChangeListener(this);
             departmentFormController.updateFormData();
 
             Stage modalStage = new Stage();
@@ -94,4 +96,8 @@ public class DepartmentListController implements Initializable {
         }
     }
 
+    @Override
+    public void onDataChange() {
+        updateTableView();
+    }
 }

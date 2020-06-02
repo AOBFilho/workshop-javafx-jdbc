@@ -1,6 +1,7 @@
 package gui;
 
 import db.DBException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -15,6 +16,8 @@ import model.entities.Department;
 import model.services.DepartmentService;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DepartmentFormController implements Initializable {
@@ -22,6 +25,8 @@ public class DepartmentFormController implements Initializable {
     private Department entity;
 
     private DepartmentService service;
+
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
     private TextField textFieldId;
@@ -49,6 +54,7 @@ public class DepartmentFormController implements Initializable {
         try {
             entity = getFormData();
             service.insertOrUpdate(entity);
+            notifyDataChangeListener();
             Utils.currentStage(event).close();
         } catch (DBException e) {
             Alerts.showAlert("Error saving department",null,e.getMessage(), Alert.AlertType.ERROR);
@@ -81,6 +87,10 @@ public class DepartmentFormController implements Initializable {
         textFieldName.setText(entity.getName());
     }
 
+    public void subscribeDataChangeListener(DataChangeListener listener) {
+        dataChangeListeners.add(listener);
+    }
+
     private Department getFormData() {
         Department department = new Department();
         department.setId(Utils.tryParseToInt(textFieldId.getText()));
@@ -91,5 +101,11 @@ public class DepartmentFormController implements Initializable {
     private void initializeNodes() {
         Constraints.setTextFieldInteger(textFieldId);
         Constraints.setTextFieldMaxValue(textFieldName,30);
+    }
+
+    private void notifyDataChangeListener(){
+        for (DataChangeListener listener : dataChangeListeners) {
+            listener.onDataChange();
+        }
     }
 }
