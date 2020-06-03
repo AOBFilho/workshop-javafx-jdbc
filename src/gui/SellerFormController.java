@@ -91,9 +91,10 @@ public class SellerFormController implements Initializable {
 
     private void setErrorMessages(Map<String, String> errorsMessage) {
         Set<String> fields = errorsMessage.keySet();
-        if (fields.contains("name")) {
-            labelErrorName.setText(errorsMessage.get("name"));
-        }
+        labelErrorName.setText(fields.contains("name") ? errorsMessage.get("name") : "");
+        labelErrorEmail.setText(fields.contains("email") ? errorsMessage.get("email") : "");
+        labelErrorBaseSalary.setText(fields.contains("baseSalary") ? errorsMessage.get("baseSalary") : "");
+        labelErrorBirthDate.setText(fields.contains("birthDate") ? errorsMessage.get("birthDate") : "");
     }
 
     @FXML
@@ -166,19 +167,22 @@ public class SellerFormController implements Initializable {
         }
         seller.setName(textFieldName.getText());
 
-        if (Utils.isEmailValid(textFieldEmail.getText())) {
+        if (!Utils.isEmailValid(textFieldEmail.getText())) {
             validationException.addErrorMessage("email","Invalid value");
         }
         seller.setEmail(textFieldEmail.getText());
 
-        if (Double.parseDouble(textFieldBaseSalary.getText()) <= 0) {
+        Double baseSalary = Utils.tryParseToDouble(textFieldBaseSalary.getText());
+        if (baseSalary == null || baseSalary <= 0) {
             validationException.addErrorMessage("baseSalary","Value must be greater than zero");
         }
-        seller.setBaseSalary(Double.parseDouble(textFieldBaseSalary.getText()));
+        seller.setBaseSalary(baseSalary);
 
+        if (datePickerBirthDate.getValue() == null) {
+            validationException.addErrorMessage("birthDate","Field can't be empty");
+        }
         seller.setBirthDate(datePickerBirthDate.getValue());
-
-        seller.setDepartment(comboBoxDepartment.getSelectionModel().getSelectedItem());
+        seller.setDepartment(comboBoxDepartment.getValue());
         if (validationException.getErrorsMessage().size() > 0) {
             throw validationException;
         }
