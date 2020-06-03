@@ -101,6 +101,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.showAndWait();
         } catch (IOException e) {
+            e.printStackTrace();
             Alerts.showAlert("IO Exception","Error opening view",e.getMessage(), Alert.AlertType.ERROR);
         }
     }
@@ -152,7 +153,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
             throw new IllegalStateException("Service was null");
         }
         Optional<ButtonType> result = Alerts.showConfirmation("Deleting department","Are you sure to delete");
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 departmentService.delete(department);
                 updateTableView();
